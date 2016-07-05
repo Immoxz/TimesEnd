@@ -1,4 +1,4 @@
-package sample;
+package pl.immoxz.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
