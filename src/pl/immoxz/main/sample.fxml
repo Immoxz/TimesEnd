@@ -11,7 +11,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.immoxz.main.Controller">
    <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <HBox spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Button id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonClicked" text="Cancel" />
             <Button id="okButton" mnemonicParsing="false" onAction="#okButtonClicked" text="OK" />
@@ -26,11 +26,14 @@
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <RadioButton fx:id="toggleAfter" mnemonicParsing="false" text="Zamknij Po" />
+                  <RadioButton fx:id="toggleAfter" mnemonicParsing="false" selected="true" text="Zamknij Po">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="toogleSwitch" />
+                     </toggleGroup></RadioButton>
                   <Region HBox.hgrow="ALWAYS" />
-                  <TextField id="hSet" fx:id="afterHouSet" prefHeight="25.0" prefWidth="75.0" promptText="H" />
-                  <TextField id="mSet" fx:id="afterMinSet" layoutX="97.0" layoutY="10.0" prefHeight="25.0" prefWidth="75.0" promptText="M" />
-                  <TextField id="sSet" fx:id="afterSecSet" layoutX="127.0" layoutY="10.0" prefHeight="25.0" prefWidth="75.0" promptText="S" />
+                  <TextField id="hSet" fx:id="afterHouSet" onAction="#setTime" prefHeight="25.0" prefWidth="75.0" promptText="H" />
+                  <TextField id="mSet" fx:id="afterMinSet" layoutX="97.0" layoutY="10.0" onAction="#setTime" prefHeight="25.0" prefWidth="75.0" promptText="M" />
+                  <TextField id="sSet" fx:id="afterSecSet" layoutX="127.0" layoutY="10.0" onAction="#setTime" prefHeight="25.0" prefWidth="75.0" promptText="S" />
                   <Button fx:id="setterOfAfterTime" mnemonicParsing="false" onAction="#setTime" text="Ustaw" />
                </children>
                <padding>
@@ -39,7 +42,7 @@
             </HBox>
             <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <RadioButton fx:id="toggleSet" mnemonicParsing="false" text="Zamknij o godzinie" />
+                  <RadioButton fx:id="toggleSet" mnemonicParsing="false" text="Zamknij o godzinie" toggleGroup="$toogleSwitch" />
                   <Region HBox.hgrow="ALWAYS" />
                   <TextField id="hSet" prefHeight="25.0" prefWidth="75.0" promptText="H" />
                   <TextField id="mSet" layoutX="97.0" layoutY="10.0" prefHeight="25.0" prefWidth="75.0" promptText="M" />

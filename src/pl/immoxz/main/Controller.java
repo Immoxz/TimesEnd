@@ -3,7 +3,10 @@ package pl.immoxz.main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +27,8 @@ public class Controller implements Initializable {
     @FXML
     private TextField afterSecSet;
 
+
+    //TODO zminic timecounte na settime i zwrocic wartosc
     public void okButtonClicked() {
         System.out.println("ok button");
         execCommand("shutdown /f /s /t " + timeCounter.cauntTime(0, 100, 100));
@@ -33,10 +38,6 @@ public class Controller implements Initializable {
     public void cancelButtonClicked() {
         System.out.println("cancel button");
         execCommand("shutdown -a");
-        if (afterHouSet.getText().equals(null))
-            System.out.println(afterHouSet.getText());
-        else
-            System.out.println("kupa");
     }
 
     @FXML
@@ -44,13 +45,15 @@ public class Controller implements Initializable {
         int H = 0;
         int M = 0;
         int S = 0;
-        if (!afterHouSet.getText().isEmpty())
+
+        if (afterHouSet.getText() != null)
             H = Integer.parseInt(afterHouSet.getText());
-        if (afterMinSet.getText() != null || afterMinSet.getText() != "")
+        if (afterMinSet.getText() != null)
             M = Integer.parseInt(afterMinSet.getText());
-        if (afterSecSet.getText() != null || afterSecSet.getText() != "")
+        if (afterSecSet.getText() != null)
             S = Integer.parseInt(afterSecSet.getText());
-        System.out.println(H + " " + M + " " + S);
+        System.out.println(afterHouSet.getText() + " " + afterMinSet.getText() + " " + afterSecSet.getText());
+        System.out.println( H + " " + M + " " + S);
     }
 
 
