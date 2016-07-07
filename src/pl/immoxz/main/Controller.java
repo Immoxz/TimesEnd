@@ -1,6 +1,5 @@
 package pl.immoxz.main;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -13,7 +12,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    TimeCounter timeCounter = new TimeCounter();
+    BetterTimeCounter betterTimeCounter = new BetterTimeCounter();
 
     int finalTime = 0;
     int H = 0;
@@ -64,12 +63,12 @@ public class Controller implements Initializable {
             S = Integer.parseInt(afterSecSet.getText());
         System.out.println(afterHouSet.getText() + " " + afterMinSet.getText() + " " + afterSecSet.getText());
         System.out.println(H + " " + M + " " + S);
-        this.finalTime = timeCounter.cauntTime(H, M, S);
+        this.finalTime = betterTimeCounter.cauntTime(H, M, S);
     }
 
     public void testRead() {
         System.out.println(hSet.getText() + " " + mSet.getText() + " " + sSet.getText()+ " test");
-        int[] cos = timeCounter.countDiff("12","50","00");
+        int[] cos = betterTimeCounter.countDiff("12","50","00");
     }
 
     public void execCommand(String cmd) {
@@ -96,9 +95,9 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        curBotTime.setText(timeCounter.takeCurrentTime());
-        hSet.setText(timeCounter.takeCurrentHour());
-        mSet.setText(timeCounter.takeCurrentMinute());
-        sSet.setText(timeCounter.takeCurrentSec());
+        curBotTime.setText(betterTimeCounter.takeCurrentTime());
+        hSet.setText(betterTimeCounter.takeCurrentHour());
+        mSet.setText(betterTimeCounter.takeCurrentMinute());
+        sSet.setText(betterTimeCounter.takeCurrentSec());
     }
 }
