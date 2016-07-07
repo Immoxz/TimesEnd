@@ -3,10 +3,7 @@ package pl.immoxz.main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +16,9 @@ public class Controller implements Initializable {
     TimeCounter timeCounter = new TimeCounter();
 
     int finalTime = 0;
+    int H = 0;
+    int M = 0;
+    int S = 0;
 
     @FXML
     private TextField afterHouSet;
@@ -26,13 +26,25 @@ public class Controller implements Initializable {
     private TextField afterMinSet;
     @FXML
     private TextField afterSecSet;
+    @FXML
+    private Label curTime;
+    @FXML
+    private Label curBotTime;
+    @FXML
+    private TextField hSet;
+    @FXML
+    private TextField mSet;
+    @FXML
+    private TextField sSet;
 
 
-    //TODO zminic timecounte na settime i zwrocic wartosc
+    //TODO stwoprzyc alertbox na elsa gdy nie ustawiono godziny
     public void okButtonClicked() {
         System.out.println("ok button");
-        execCommand("shutdown /f /s /t " + timeCounter.cauntTime(0, 100, 100));
-        System.out.println(timeCounter.cauntTime(0, 100, 100));
+        if (finalTime <= 60)
+            execCommand("shutdown /f /s /t " + this.finalTime);
+        //else
+        System.out.println(this.finalTime);
     }
 
     public void cancelButtonClicked() {
@@ -42,9 +54,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void setTime() {
-        int H = 0;
-        int M = 0;
-        int S = 0;
+
 
         if (afterHouSet.getText() != null)
             H = Integer.parseInt(afterHouSet.getText());
@@ -53,9 +63,14 @@ public class Controller implements Initializable {
         if (afterSecSet.getText() != null)
             S = Integer.parseInt(afterSecSet.getText());
         System.out.println(afterHouSet.getText() + " " + afterMinSet.getText() + " " + afterSecSet.getText());
-        System.out.println( H + " " + M + " " + S);
+        System.out.println(H + " " + M + " " + S);
+        this.finalTime = timeCounter.cauntTime(H, M, S);
     }
 
+    public void testRead() {
+        System.out.println(hSet.getText() + " " + mSet.getText() + " " + sSet.getText()+ " test");
+        int[] cos = timeCounter.countDiff("12","50","00");
+    }
 
     public void execCommand(String cmd) {
         ProcessBuilder builder = new ProcessBuilder(
@@ -81,9 +96,9 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        afterHouSet.setText(null);
-        afterMinSet.setText(null);
-        afterSecSet.setText(null);
-
+        curBotTime.setText(timeCounter.takeCurrentTime());
+        hSet.setText(timeCounter.takeCurrentHour());
+        mSet.setText(timeCounter.takeCurrentMinute());
+        sSet.setText(timeCounter.takeCurrentSec());
     }
 }
