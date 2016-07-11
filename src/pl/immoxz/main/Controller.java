@@ -2,10 +2,23 @@ package pl.immoxz.main;
 
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.apache.tika.exception.TikaException;
+import org.xml.sax.SAXException;
 
+
+import java.awt.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -16,17 +29,28 @@ public class Controller implements Initializable {
     BetterTimeCounter betterTimeCounter = new BetterTimeCounter();
 
     long finalTime = 0;
-    ConfirmBox confirmBox = new ConfirmBox();
-    AlertBox alertBox = new AlertBox();
+    private ConfirmBox confirmBox = new ConfirmBox();
+    private AlertBox alertBox = new AlertBox();
+    private PropertiesReader propertiesReader = new PropertiesReader();
+
+    final FileChooser fileChooser = new FileChooser();
+    private Desktop desktop = Desktop.getDesktop();
+    private Stage stage = new Stage();
+
+
 
     @FXML
-    private TextField afterHouSet, afterMinSet, afterSecSet, hSet, mSet, sSet;
+    private TextField afterHouSet, afterMinSet, afterSecSet, hSet = new TextField(), mSet = new TextField(), sSet = new TextField(), filePathText = new TextField();
     @FXML
-    private Label curTime, curBotTime;
+    private Label curTime = new Label(), curBotTime = new Label();
     @FXML
     private RadioButton toggleOnTime = new RadioButton(), toggleAfterTime = new RadioButton();
     @FXML
-    private Button onTimeButton, buttonAfterTime;
+    private Button onTimeButton = new Button(), buttonAfterTime = new Button(), setPathButton;
+    @FXML
+    private BorderPane root = new BorderPane();
+    @FXML
+    private VBox movieVbox, mainVbox;
 
 
     //TODO stwoprzyc alertbox na elsa gdy nie ustawiono godziny
@@ -80,6 +104,30 @@ public class Controller implements Initializable {
         execCommand("shutdown -a");
     }
 
+    @FXML
+    private void setTimeScene() {
+        VBox center = null;
+        try {
+            center = FXMLLoader.load(getClass().getResource("centerOneScene.fxml"));
+            root.setCenter(null);
+            root.setCenter(center);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void setMovieScene() {
+        VBox center = null;
+        try {
+            center = FXMLLoader.load(getClass().getResource("centerTwoScene.fxml"));
+            root.setCenter(null);
+            root.setCenter(center);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void setTime() {
@@ -93,22 +141,52 @@ public class Controller implements Initializable {
         if (!afterSecSet.getText().isEmpty()) {
             S = Integer.parseInt(afterSecSet.getText());
         }
-        curTime.setText(H+":"+M+":"+S);
+        curTime.setText(H + ":" + M + ":" + S);
         this.finalTime = betterTimeCounter.countTime(H, M, S);
     }
 
     @FXML
-    public void setOnTime(){
+    public void setOnTime() {
         long[] differentsInTimeL = betterTimeCounter.countDiff(hSet.getText(), mSet.getText(), sSet.getText());
-        curTime.setText(differentsInTimeL[0]+":"+differentsInTimeL[1]+":"+differentsInTimeL[2]);
-//        curTime.getStyleClass().add("-fx-text-fill: rgb(100%,0%,0%)");
-        this.finalTime = betterTimeCounter.countTime(differentsInTimeL[0],differentsInTimeL[1],differentsInTimeL[2]);
+        curTime.setText(differentsInTimeL[0] + ":" + differentsInTimeL[1] + ":" + differentsInTimeL[2]);
+        this.finalTime = betterTimeCounter.countTime(differentsInTimeL[0], differentsInTimeL[1], differentsInTimeL[2]);
+    }
+
+
+    @FXML
+    private void setPathToMovie(){
+
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            filePathText.setText(file.getPath());
+        }
+
     }
 
 
     public void testRead() {
-        long[] cos = betterTimeCounter.countDiff(hSet.getText(), mSet.getText(), sSet.getText());
-        curTime.setText(cos[0]+":"+cos[1]+":"+cos[2]);
+        /*File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {*/
+            try {
+                propertiesReader.readProperty();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (TikaException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
+            //openFile(file);
+//        }
+
+    }
+
+    private void openFile(File file) {
+        try {
+            desktop.open(file);
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
     }
 
 
