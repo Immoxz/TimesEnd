@@ -15,7 +15,7 @@ public class Controller implements Initializable {
 
     BetterTimeCounter betterTimeCounter = new BetterTimeCounter();
 
-    int finalTime = 0;
+    long finalTime = 0;
     ConfirmBox confirmBox = new ConfirmBox();
     AlertBox alertBox = new AlertBox();
 
@@ -47,27 +47,31 @@ public class Controller implements Initializable {
 
     @FXML
     public void onToggleButtonOn() {
-            hSet.setDisable(true);
-            mSet.setDisable(true);
-            sSet.setDisable(true);
-            onTimeButton.setDisable(true);
-
-            afterHouSet.setDisable(false);
-            afterMinSet.setDisable(false);
-            afterSecSet.setDisable(false);
-            buttonAfterTime.setDisable(false);
+        hSet.setDisable(true);
+        mSet.setDisable(true);
+        sSet.setDisable(true);
+        onTimeButton.setDisable(true);
+        afterHouSet.setDisable(false);
+        afterMinSet.setDisable(false);
+        afterSecSet.setDisable(false);
+        buttonAfterTime.setDisable(false);
     }
+
     @FXML
     public void onToggleButtonOff() {
-            afterHouSet.setDisable(true);
-            afterMinSet.setDisable(true);
-            afterSecSet.setDisable(true);
-            buttonAfterTime.setDisable(true);
+        afterHouSet.setDisable(true);
+        afterMinSet.setDisable(true);
+        afterSecSet.setDisable(true);
+        buttonAfterTime.setDisable(true);
 
-            hSet.setDisable(false);
-            mSet.setDisable(false);
-            sSet.setDisable(false);
-            onTimeButton.setDisable(false);
+        hSet.setText(Integer.toString(1 + (Integer.parseInt(betterTimeCounter.takeCurrentHour()))));
+        mSet.setText(betterTimeCounter.takeCurrentMinute());
+        sSet.setText(betterTimeCounter.takeCurrentSec());
+
+        hSet.setDisable(false);
+        mSet.setDisable(false);
+        sSet.setDisable(false);
+        onTimeButton.setDisable(false);
     }
 
     @FXML
@@ -87,22 +91,24 @@ public class Controller implements Initializable {
             M = Integer.parseInt(afterMinSet.getText());
         }
         if (!afterSecSet.getText().isEmpty()) {
-            H = Integer.parseInt(afterSecSet.getText());
+            S = Integer.parseInt(afterSecSet.getText());
         }
-        System.out.println(afterHouSet.getText() + " " + afterMinSet.getText() + " " + afterSecSet.getText());
-        System.out.println(H + " " + M + " " + S);
-        this.finalTime = betterTimeCounter.cauntTime(H, M, S);
+        curTime.setText(H+":"+M+":"+S);
+        this.finalTime = betterTimeCounter.countTime(H, M, S);
+    }
+
+    @FXML
+    public void setOnTime(){
+        long[] differentsInTimeL = betterTimeCounter.countDiff(hSet.getText(), mSet.getText(), sSet.getText());
+        curTime.setText(differentsInTimeL[0]+":"+differentsInTimeL[1]+":"+differentsInTimeL[2]);
+//        curTime.getStyleClass().add("-fx-text-fill: rgb(100%,0%,0%)");
+        this.finalTime = betterTimeCounter.countTime(differentsInTimeL[0],differentsInTimeL[1],differentsInTimeL[2]);
     }
 
 
     public void testRead() {
-        System.out.println(hSet.getText() + " " + mSet.getText() + " " + sSet.getText() + " test");
-        int[] cos = betterTimeCounter.countDiff("12", "50", "00");
-        if (confirmBox.displey("Hello", "chcesz przetestować to?")) {
-            System.out.println("działa");
-        } else {
-            System.out.println("nie działa");
-        }
+        long[] cos = betterTimeCounter.countDiff(hSet.getText(), mSet.getText(), sSet.getText());
+        curTime.setText(cos[0]+":"+cos[1]+":"+cos[2]);
     }
 
 
@@ -132,9 +138,10 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         toggleAfterTime.setSelected(true);
         curBotTime.setText(betterTimeCounter.takeCurrentTime());
-        hSet.setText(betterTimeCounter.takeCurrentHour());
+        hSet.setText(Integer.toString(1 + (Integer.parseInt(betterTimeCounter.takeCurrentHour()))));
         mSet.setText(betterTimeCounter.takeCurrentMinute());
         sSet.setText(betterTimeCounter.takeCurrentSec());
+        curTime.setText("0:0:0");
         if (!toggleOnTime.isSelected()) {
             hSet.setDisable(true);
             mSet.setDisable(true);

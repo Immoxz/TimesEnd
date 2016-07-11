@@ -2,18 +2,20 @@ package pl.immoxz.main;
 
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ImmoXZ on 2016-07-07.
  */
 public class BetterTimeCounter {
+    AlertBox alertBox = new AlertBox();
+    ConfirmBox confirmBox = new ConfirmBox();
 
-    public int cauntTime(int H, int M, int S) {
-        Integer fullTime = 0;
+    public long countTime(long H, long M, long S) {
+        long fullTime = 0;
 
         if (S > 60) {
             M += S / 60;
@@ -52,56 +54,41 @@ public class BetterTimeCounter {
         return dateFormat.format(date);
     }
 
-    public int[] countDiff(String H, String M, String S) {
-        int[] diffreents = {0, 0, 0};
+    public long[] countDiff(String H, String M, String S) {
+        long[] diffreents = {0, 0, 0};
 
         try {
             Date curTime = new SimpleDateFormat("HH:mm:ss").parse(takeCurrentTime());
-            Calendar calendarCurTime = Calendar.getInstance();
-            calendarCurTime.setTime(curTime);
-            calendarCurTime.add(Calendar.DATE, 1);
 
-            String setTime = H + ":" + M + ":" + S;
-            Date time2 = new SimpleDateFormat("HH:mm:ss").parse(setTime);
-            Calendar calendarTimeSet = Calendar.getInstance();
-            calendarTimeSet.setTime(time2);
-            calendarTimeSet.add(Calendar.DATE, 1);
+            String time = H + ":" + M + ":" + S;
+            Date setTime = new SimpleDateFormat("HH:mm:ss").parse(time);
 
-            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            if (calendarCurTime.after(calendarTimeSet.getTime())) {
 
-                System.out.println("Cur data: "+dateFormat.format(calendarCurTime.getTime()));
-                System.out.println("set data: "+dateFormat.format(calendarTimeSet.getTime()));
-                System.out.println(calendarCurTime.compareTo(calendarTimeSet));
-//                Date diff = dateFormat.format(calendarCurTime.compareTo(calendarTimeSet));
-                System.out.println(true);
+            long diff = setTime.getTime() - curTime.getTime();
+
+            long hours = TimeUnit.MILLISECONDS.toHours(diff);
+            long minutes = (TimeUnit.MILLISECONDS.toMinutes(diff) - (hours * 60)) % 60;
+            long seconds = (TimeUnit.MILLISECONDS.toSeconds(diff) - (hours * 60 * 60) - (minutes * 60)) % 60;
+            if (setTime.after(curTime)) {
+                diffreents[0] = hours;
+                diffreents[1] = minutes;
+                diffreents[2] = seconds;
             } else {
-                System.out.println("Cur data: "+dateFormat.format(calendarCurTime.getTime()));
-                System.out.println("set data: "+dateFormat.format(calendarTimeSet.getTime()));
-                System.out.println(calendarCurTime.compareTo(calendarTimeSet));
-                System.out.println(false);
+                if (confirmBox.displey("Ustawiony czas jest duży", "Czas zamknięcia został ustawiony na " + time + " czy napewno chcesz zamknąc komputer za " + hours + ":" + minutes)) {
+                    diffreents[0] = hours;
+                    diffreents[1] = minutes;
+                    diffreents[2] = seconds;
+                } else {
+                    return null;
+                }
             }
+
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
-        /*String[] curStrTime = {takeCurrentHour(), takeCurrentMinute(), takeCurrentSec()};
-        int[] curintTime = {Integer.parseInt(curStrTime[0]), Integer.parseInt(curStrTime[1]), Integer.parseInt(curStrTime[2])};
-        int itime[] = {Integer.parseInt(H), Integer.parseInt(M), Integer.parseInt(S)};
-        itime[0] = curintTime[0] - itime[0];
-        if(itime[0]>0)
-            itime[0]=0;
-        itime[1] = curintTime[1] - itime[1];
-        if(itime[1]>0)
-            itime[1]=-itime[1];
-        itime[2] = curintTime[2] - itime[2];
-        if(itime[1]>0)
-            itime[1]=-itime[1];
-        if (itime[0] <= 0 && itime[1] <= 0 && itime[1] <= 0)
-            diffreents = itime;*/
         return diffreents;
     }
+
 
 }
