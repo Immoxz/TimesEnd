@@ -77,10 +77,9 @@ public class PropertiesReader {
         System.out.println(metadata.get(XMPDM.AUDIO_SAMPLE_RATE));
         frameRate = (int) Double.parseDouble(metadata.get(XMPDM.AUDIO_SAMPLE_RATE));
 
-                System.out.println(((dur * frameRate)));
+        System.out.println(((dur * frameRate)));
         for (String name : metadataNames) {
             System.out.println(name + ": " + metadata.get(name));
         }
     }
-
 }
