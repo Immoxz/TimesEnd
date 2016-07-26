@@ -4,17 +4,14 @@ package pl.immoxz.main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.tika.exception.TikaException;
-import org.xml.sax.SAXException;
-
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -36,7 +33,6 @@ public class Controller implements Initializable {
     final FileChooser fileChooser = new FileChooser();
     private Desktop desktop = Desktop.getDesktop();
     private Stage stage = new Stage();
-
 
 
     @FXML
@@ -154,7 +150,7 @@ public class Controller implements Initializable {
 
 
     @FXML
-    private void setPathToMovie(){
+    private void setPathToMovie() {
 
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
@@ -165,21 +161,14 @@ public class Controller implements Initializable {
 
 
     public void testRead() {
-        /*File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {*/
-            try {
-                propertiesReader.readProperty();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (TikaException e) {
-                e.printStackTrace();
-            } catch (SAXException e) {
-                e.printStackTrace();
-            }
-            //openFile(file);
+//        File file = fileChooser.showOpenDialog(stage);
+//        if (file != null) {
+            propertiesReader.VideoInfo("C:/Projekts/svid.mp4");
+
+//            openFile(file);
 //        }
 
-    }
+        }
 
     private void openFile(File file) {
         try {
