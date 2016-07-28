@@ -9,7 +9,7 @@
     <top>
         <HBox spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Wybierz scene" />
+                <Label text="Program służy ustawianiu czasu zamknięcia komputera" />
                 <Region HBox.hgrow="ALWAYS" />
             <ToggleButton fx:id="timeSceneButton" mnemonicParsing="false" onAction="#setTimeScene" text="Ustaw czas">
                <toggleGroup>
@@ -17,7 +17,6 @@
                </toggleGroup>
             </ToggleButton>
             <ToggleButton fx:id="movieSceneButton" mnemonicParsing="false" onAction="#setMovieScene" text="Ustaw Film" toggleGroup="$scenaSwitch" />
-                <Button id="cancelButton" mnemonicParsing="false" onAction="#testRead" text="TESTButton" />
             </children>
         </HBox>
     </top>
@@ -29,7 +28,7 @@
             <children>
                 <Label text="Created by Immoxz" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Label layoutX="10.0" layoutY="10.0" text="Czas uruchomienia: " />
+                <Label layoutX="10.0" layoutY="10.0" text="Uruchomienie" />
                 <Label fx:id="curBotTime" layoutX="113.0" layoutY="10.0" />
             </children>
             <padding>
