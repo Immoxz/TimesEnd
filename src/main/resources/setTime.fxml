@@ -26,7 +26,8 @@
     <bottom>
         <HBox spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Created by Immoxz" />
+                <Label text="Created by Piotr Lejman" />
+            <Hyperlink fx:id="mailLink" text="Mail" onAction="#onClickMailLink"/>
                 <Region HBox.hgrow="ALWAYS" />
                 <Label layoutX="10.0" layoutY="10.0" text="Uruchomienie" />
                 <Label fx:id="curBotTime" layoutX="113.0" layoutY="10.0" />
