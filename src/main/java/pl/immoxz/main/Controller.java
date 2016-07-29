@@ -63,11 +63,11 @@ public class Controller implements Initializable {
         System.out.println("ok button");
         if (finalTime >= 60) {
             System.out.println("zamyka za 60++");
-//            execCommand("shutdown /f /s /t " + this.finalTime);
+            execCommand("shutdown /f /s /t " + this.finalTime);
         } else {
             if (confirmBox.displey("Wykryto brak wprowadzonego czasu zamknięcia", "Czy chcesz zamknąc system teraz?")) {
                 alertBox.displey("Zamykanie Systemu", "Za 60 sekund system zostanie zamknięty!");
-//                execCommand("shutdown /f /s /t " + 60);
+                execCommand("shutdown /f /s /t " + 60);
             }
         }
         System.out.println(this.finalTime);
@@ -139,7 +139,7 @@ public class Controller implements Initializable {
     public void setTime() {
         int H = 0, M = 0, S = 0;
         if (!afterHouSet.getText().isEmpty()) {
-            if (isNum(0, afterHouSet.getText()))
+            if (isGoodInt(0, afterHouSet.getText()))
                 H = Integer.parseInt(afterHouSet.getText());
         }
         if (!afterMinSet.getText().isEmpty()) {
