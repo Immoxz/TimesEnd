@@ -9,14 +9,14 @@
     <top>
         <HBox spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Program służy ustawianiu czasu zamknięcia komputera" />
+                <Label text="Program służy do ustwiania czasu zamknięcia komputera" />
                 <Region HBox.hgrow="ALWAYS" />
-            <ToggleButton fx:id="timeSceneButton" mnemonicParsing="false" onAction="#setTimeScene" text="Ustaw czas">
-               <toggleGroup>
-                  <ToggleGroup fx:id="scenaSwitch" />
-               </toggleGroup>
-            </ToggleButton>
-            <ToggleButton fx:id="movieSceneButton" mnemonicParsing="false" onAction="#setMovieScene" text="Ustaw Film" toggleGroup="$scenaSwitch" />
+                <ToggleButton fx:id="timeSceneButton" mnemonicParsing="false" onAction="#setTimeScene" text="Ustaw czas">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="scenaSwitch" />
+                    </toggleGroup>
+                </ToggleButton>
+                <ToggleButton fx:id="movieSceneButton" mnemonicParsing="false" onAction="#setMovieScene" text="Ustaw Film" toggleGroup="$scenaSwitch" />
             </children>
         </HBox>
     </top>
@@ -24,20 +24,28 @@
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
     </padding>
     <bottom>
-        <HBox spacing="10.0" BorderPane.alignment="CENTER">
+        <VBox fx:id="botVbox">
             <children>
-                <Label text="Created by Piotr Lejman" />
-            <Hyperlink fx:id="mailLink" text="Mail" onAction="#onClickMailLink"/>
-                <Region HBox.hgrow="ALWAYS" />
-                <Label layoutX="10.0" layoutY="10.0" text="Uruchomienie" />
-                <Label fx:id="curBotTime" layoutX="113.0" layoutY="10.0" />
+                <HBox spacing="10.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="Created by Piotr Lejman" />
+                        <Hyperlink fx:id="mailLink" onAction="#onClickMailLink" text="Mail" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label layoutX="10.0" layoutY="10.0" text="Uruchomienie" />
+                        <Label fx:id="curBotTime" layoutX="113.0" layoutY="10.0" />
+                    </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+
+                </HBox>
             </children>
-            <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </padding>
-        </HBox>
+        </VBox>
     </bottom>
-   <center>
-      <Pane BorderPane.alignment="CENTER" />
-   </center>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+    <center>
+        <Pane BorderPane.alignment="CENTER" />
+    </center>
 </BorderPane>

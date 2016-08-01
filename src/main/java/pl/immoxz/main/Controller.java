@@ -38,11 +38,13 @@ public class Controller implements Initializable {
     private Desktop desktop = Desktop.getDesktop();
     private Stage stage = new Stage();
 
+    private MyUtilities myUtil = new MyUtilities();
+
 
     @FXML
     private TextField afterHouSet, afterMinSet, afterSecSet, hSet = new TextField(), mSet = new TextField(), sSet = new TextField(), filePathText = new TextField();
     @FXML
-    private Label curTime = new Label(), curBotTime = new Label();
+    private Label currentTime = new Label(), curBotTime = new Label();
     @FXML
     private RadioButton toggleOnTime = new RadioButton(), toggleAfterTime = new RadioButton();
     @FXML
@@ -50,7 +52,7 @@ public class Controller implements Initializable {
     @FXML
     private BorderPane root = new BorderPane();
     @FXML
-    private VBox movieVbox, mainVbox;
+    private VBox movieVbox, mainVbox, botVbox;
     @FXML
     private Hyperlink mailLink = new Hyperlink();
 
@@ -60,11 +62,11 @@ public class Controller implements Initializable {
         System.out.println("ok button");
         if (finalTime >= 60) {
             System.out.println("zamyka za 60++");
-            execCommand("shutdown /f /s /t " + this.finalTime);
+            myUtil.execCommand("shutdown /f /s /t " + this.finalTime);
         } else {
             if (confirmBox.displey("Wykryto brak wprowadzonego czasu zamknięcia", "Czy chcesz zamknąc system teraz?")) {
                 alertBox.displey("Zamykanie Systemu", "Za 60 sekund system zostanie zamknięty!");
-                execCommand("shutdown /f /s /t 60");
+                myUtil.execCommand("shutdown /f /s /t 60");
             }
         }
         System.out.println(this.finalTime);
@@ -72,7 +74,11 @@ public class Controller implements Initializable {
 
     @FXML
     public void onToggleButtonOn() {
-        curTime.setText("0:0:0");
+
+        setDefViewe(hSet);
+        setDefViewe(mSet);
+        setDefViewe(sSet);
+        currentTime.setText("0:0:0");
         hSet.setDisable(true);
         mSet.setDisable(true);
         sSet.setDisable(true);
@@ -83,9 +89,13 @@ public class Controller implements Initializable {
         buttonAfterTime.setDisable(false);
     }
 
+
     @FXML
     public void onToggleButtonOff() {
-        curTime.setText("0:0:0");
+        setDefViewe(afterHouSet);
+        setDefViewe(afterMinSet);
+        setDefViewe(afterSecSet);
+        currentTime.setText("0:0:0");
         afterHouSet.setDisable(true);
         afterMinSet.setDisable(true);
         afterSecSet.setDisable(true);
@@ -101,10 +111,15 @@ public class Controller implements Initializable {
         onTimeButton.setDisable(false);
     }
 
+    protected void setDefViewe(TextField textField) {
+        textField.setStyle("-fx-background-color: white;");
+        textField.setText("");
+    }
+
     @FXML
     public void cancelButtonClicked() {
         System.out.println("cancel button");
-        execCommand("shutdown -a");
+        myUtil.execCommand("shutdown -a");
     }
 
     @FXML
@@ -138,82 +153,44 @@ public class Controller implements Initializable {
     public void setTime() {
         int H = 0, M = 0, S = 0;
         if (!afterHouSet.getText().isEmpty()) {
-            if (isGoodIntOfTF(afterHouSet))
+            if (myUtil.isGoodIntOfTF(afterHouSet))
                 H = Integer.parseInt(afterHouSet.getText());
         }
         if (!afterMinSet.getText().isEmpty()) {
-            if (isGoodIntOfTF(afterMinSet))
+            if (myUtil.isGoodIntOfTF(afterMinSet))
                 M = Integer.parseInt(afterMinSet.getText());
         }
         if (!afterSecSet.getText().isEmpty()) {
-            if (isGoodIntOfTF(afterSecSet))
+            if (myUtil.isGoodIntOfTF(afterSecSet))
                 S = Integer.parseInt(afterSecSet.getText());
         }
-        curTime.setText(H + ":" + M + ":" + S);
+        currentTime.setText(H + ":" + M + ":" + S);
         this.finalTime = betterTimeCounter.countTime(H, M, S);
-    }
-
-    protected boolean isGoodIntOfTF(TextField textField) {
-
-        if (isInteger(textField.getText())) {
-            textField.setStyle("-fx-background-color: lightskyblue;");
-            return true;
-        } else {
-            textField.setStyle("-fx-background-color: red;");
-            return false;
-        }
-
-    }
-
-    protected static boolean isInteger(String input) {
-        try {
-            Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            return false;
-        } catch (NullPointerException e) {
-            return false;
-        }
-        // only got here if we didn't return false
-        return true;
     }
 
     @FXML
     public void setOnTime() {
         String H = "", M = "", S = "";
-        boolean[] status = {false, false, false};
-        if (!hSet.getText().isEmpty()) {
-            if (isGoodIntOfTF(hSet)) {
-                H = hSet.getText();
-                status[0] = true;
-            }
+        boolean[] status={};
+        if (myUtil.isGoodIntOfTF(hSet)) {
+            H = hSet.getText();
+            status[0] = true;
         }
-        if (!mSet.getText().isEmpty()) {
-            if (isGoodIntOfTF(mSet)) {
-                M = mSet.getText();
-                status[1] = true;
-            }
+        if (myUtil.isGoodIntOfTF(mSet)) {
+            M = mSet.getText();
+            status[1] = true;
         }
-        if (!sSet.getText().isEmpty()) {
-            if (isGoodIntOfTF(sSet)) {
-                S = sSet.getText();
-                status[2] = true;
-            }
+        if (myUtil.isGoodIntOfTF(sSet)) {
+            S = sSet.getText();
+            status[2] = true;
+
         }
-        if (areAllTrue(status)) {
+        if (myUtil.areAllTrue(status)) {
             long[] differentsInTimeL = betterTimeCounter.countDiff(H, M, S);
-            curTime.setText(differentsInTimeL[0] + ":" + differentsInTimeL[1] + ":" + differentsInTimeL[2]);
+            currentTime.setText(differentsInTimeL[0] + ":" + differentsInTimeL[1] + ":" + differentsInTimeL[2]);
             this.finalTime = betterTimeCounter.countTime(differentsInTimeL[0], differentsInTimeL[1], differentsInTimeL[2]);
         }
     }
-
-
-    public static boolean areAllTrue(boolean[] array)
-    {
-        for(boolean b : array) if(!b) return false;
-        return true;
-    }
-
-
 
 
     @FXML
@@ -224,7 +201,7 @@ public class Controller implements Initializable {
             long milisec = (long) propertiesReader.GetDuration(file.getPath());
             long[] Time = betterTimeCounter.CalculateTimeFromMilsec((milisec / 1000));
             System.out.println("H: " + Time[0] + " M: " + Time[1] + " S: " + Time[2]);
-            curTime.setText(Time[0] + ":" + Time[1] + ":" + Time[2]);
+            currentTime.setText(Time[0] + ":" + Time[1] + ":" + Time[2]);
             this.finalTime = betterTimeCounter.countTime(Time[0], Time[1], Time[2]);
         }
 
@@ -252,27 +229,7 @@ public class Controller implements Initializable {
     }
 
 
-    public void execCommand(String cmd) {
-        ProcessBuilder builder = new ProcessBuilder(
-                "cmd.exe", "/c", cmd);
-        builder.redirectErrorStream(true);
-        Process p = null;
-        try {
-            p = builder.start();
-            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            while (true) {
-                line = r.readLine();
-                if (line == null) {
-                    break;
-                }
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    @FXML
     public void onClickMailLink() {
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
@@ -288,13 +245,12 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         toggleAfterTime.setSelected(true);
         curBotTime.setText(betterTimeCounter.takeCurrentTime());
-        hSet.setText(Integer.toString(1 + (Integer.parseInt(betterTimeCounter.takeCurrentHour()))));
+        /*hSet.setText(Integer.toString(1 + (Integer.parseInt(betterTimeCounter.takeCurrentHour()))));
         mSet.setText(betterTimeCounter.takeCurrentMinute());
-        sSet.setText(betterTimeCounter.takeCurrentSec());
-        curTime.setText("0:0:0");
+        sSet.setText(betterTimeCounter.takeCurrentSec());*/
+        currentTime.setText("0:0:0");
         if (!toggleOnTime.isSelected()) {
             hSet.setDisable(true);
             mSet.setDisable(true);
