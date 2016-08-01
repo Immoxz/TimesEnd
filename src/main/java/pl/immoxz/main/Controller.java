@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -18,7 +17,6 @@ import javafx.stage.Stage;
 import java.awt.*;
 
 import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,7 +55,6 @@ public class Controller implements Initializable {
     private Hyperlink mailLink = new Hyperlink();
 
 
-    //TODO stwoprzyc alertbox na elsa gdy nie ustawiono godziny
     @FXML
     public void okButtonClicked() {
         System.out.println("ok button");
@@ -67,7 +64,7 @@ public class Controller implements Initializable {
         } else {
             if (confirmBox.displey("Wykryto brak wprowadzonego czasu zamknięcia", "Czy chcesz zamknąc system teraz?")) {
                 alertBox.displey("Zamykanie Systemu", "Za 60 sekund system zostanie zamknięty!");
-                execCommand("shutdown /f /s /t " + 60);
+                execCommand("shutdown /f /s /t 60");
             }
         }
         System.out.println(this.finalTime);
@@ -75,6 +72,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void onToggleButtonOn() {
+        curTime.setText("0:0:0");
         hSet.setDisable(true);
         mSet.setDisable(true);
         sSet.setDisable(true);
@@ -87,6 +85,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void onToggleButtonOff() {
+        curTime.setText("0:0:0");
         afterHouSet.setDisable(true);
         afterMinSet.setDisable(true);
         afterSecSet.setDisable(true);
@@ -139,48 +138,29 @@ public class Controller implements Initializable {
     public void setTime() {
         int H = 0, M = 0, S = 0;
         if (!afterHouSet.getText().isEmpty()) {
-            if (isGoodInt(0, afterHouSet.getText()))
+            if (isGoodIntOfTF(afterHouSet))
                 H = Integer.parseInt(afterHouSet.getText());
         }
         if (!afterMinSet.getText().isEmpty()) {
-            M = Integer.parseInt(afterMinSet.getText());
+            if (isGoodIntOfTF(afterMinSet))
+                M = Integer.parseInt(afterMinSet.getText());
         }
         if (!afterSecSet.getText().isEmpty()) {
-            S = Integer.parseInt(afterSecSet.getText());
+            if (isGoodIntOfTF(afterSecSet))
+                S = Integer.parseInt(afterSecSet.getText());
         }
         curTime.setText(H + ":" + M + ":" + S);
         this.finalTime = betterTimeCounter.countTime(H, M, S);
     }
 
-    protected boolean isGoodInt(int status, String input) {
-        switch (status) {
-            case 0: {
-                if (isInteger(input)) {
-                    return true;
-                } else {
-                    afterHouSet.setStyle("-fx-text-inner-color: red;");
-                    return false;
-                }
-            }
-            case 1: {
-                if (isInteger(input)) {
-                    return true;
-                } else {
-                    afterHouSet.setStyle("-fx-text-inner-color: red;");
-                    return false;
-                }
-            }
-            case 2: {
-                if (isInteger(input)) {
-                    return true;
-                } else {
-                    afterHouSet.setStyle("-fx-text-inner-color: red;");
-                    return false;
-                }
+    protected boolean isGoodIntOfTF(TextField textField) {
 
-            }
-            default:
-                return false;
+        if (isInteger(textField.getText())) {
+            textField.setStyle("-fx-background-color: lightskyblue;");
+            return true;
+        } else {
+            textField.setStyle("-fx-background-color: red;");
+            return false;
         }
 
     }
@@ -199,10 +179,41 @@ public class Controller implements Initializable {
 
     @FXML
     public void setOnTime() {
-        long[] differentsInTimeL = betterTimeCounter.countDiff(hSet.getText(), mSet.getText(), sSet.getText());
-        curTime.setText(differentsInTimeL[0] + ":" + differentsInTimeL[1] + ":" + differentsInTimeL[2]);
-        this.finalTime = betterTimeCounter.countTime(differentsInTimeL[0], differentsInTimeL[1], differentsInTimeL[2]);
+        String H = "", M = "", S = "";
+        boolean[] status = {false, false, false};
+        if (!hSet.getText().isEmpty()) {
+            if (isGoodIntOfTF(hSet)) {
+                H = hSet.getText();
+                status[0] = true;
+            }
+        }
+        if (!mSet.getText().isEmpty()) {
+            if (isGoodIntOfTF(mSet)) {
+                M = mSet.getText();
+                status[1] = true;
+            }
+        }
+        if (!sSet.getText().isEmpty()) {
+            if (isGoodIntOfTF(sSet)) {
+                S = sSet.getText();
+                status[2] = true;
+            }
+        }
+        if (areAllTrue(status)) {
+            long[] differentsInTimeL = betterTimeCounter.countDiff(H, M, S);
+            curTime.setText(differentsInTimeL[0] + ":" + differentsInTimeL[1] + ":" + differentsInTimeL[2]);
+            this.finalTime = betterTimeCounter.countTime(differentsInTimeL[0], differentsInTimeL[1], differentsInTimeL[2]);
+        }
     }
+
+
+    public static boolean areAllTrue(boolean[] array)
+    {
+        for(boolean b : array) if(!b) return false;
+        return true;
+    }
+
+
 
 
     @FXML
