@@ -29,7 +29,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>pl.immoxz.main.Main</mainClass>
+                            <mainClass>Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>
@@ -43,7 +43,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>pl.immoxz.main.Main</mainClass>
+                            <mainClass>Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
